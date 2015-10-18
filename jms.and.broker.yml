@@ -1,0 +1,11 @@
+gateway:
+  image: gateway.ex.base
+  ports:
+    - "8000:8000"
+    - "8001:8001"
+  links:
+    - broker:broker.example.com
+  hostname: gateway.example.com
+broker:
+  image: broker.ex.base 
+ 

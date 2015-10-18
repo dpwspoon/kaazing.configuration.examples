@@ -1,0 +1,39 @@
+# Pull base image
+FROM java:openjdk-8-jdk
+
+MAINTAINER David Witherspoon, contact via github issues: https://github.com/dpwspoon
+
+# TODO: update this
+# pub   2048R/24BD9545 2014-07-18 [expires: 2018-07-18]
+#       Key fingerprint = 409E F88E 5386 FE7C 68FC  0B77 B795 92BE 24BD 9545
+# uid                  David Witherspoon <dpwspoon@gmail.com>
+# sub   2048R/9B801C59 2014-07-18 [expires: 2018-07-18]
+# RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 409EF88E5386FE7C68FC0B77B79592BE24BD9545
+
+ENV KAAZING_GATEWAY_VERSION 4.0.9
+ENV KAAZING_GATEWAY_URL http://download.kaazing.com/com/download/jms/4.0.9.626/kaazing-websocket-gateway-jms-${KAAZING_GATEWAY_VERSION}.tar.gz
+
+# Set Working Dir
+WORKDIR /kaazing-gateway
+
+# Get the latest stable version of gateway
+RUN curl -fSL -o gateway.tar.gz $KAAZING_GATEWAY_URL \
+# TODO: once have key update	
+# && curl -fSL -o gateway.tar.gz.asc ${KAAZING_GATEWAY_URL}.asc \
+#	&& gpg --verify gateway.tar.gz.asc \
+	&& tar -xvf gateway.tar.gz --strip-components=0 \
+	&& rm gateway.tar.gz*
+
+# By default, Java uses /dev/random to gather entropy data for cryptographic
+# needs. However, using /dev/random can cause delays during Gateway startup,
+# especially in virtualized environments. /dev/urandom does not require
+# collection of entropy data in subsequent runs.
+# See: https://github.com/kaazing/gateway/issues/167
+ENV GATEWAY_OPTS="-Xmx512m -Djava.security.egd=file:/dev/urandom"
+
+# Expose Ports
+EXPOSE 61616
+
+# Define default command
+CMD ["java","-jar","apache-activemq-5.10.0/bin/activemq.jar","start"]
+
