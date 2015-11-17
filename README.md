@@ -18,7 +18,7 @@ docker run --name=gateway -h gateway.example.com dockerized.gateway
 docker kill gateway
 ```
 
-### Launching AMQP WebSocket Service 
+### Launching JMS WebSocket Service 
 
 ```bash
 docker-compose -f jms.and.broker.yml up
