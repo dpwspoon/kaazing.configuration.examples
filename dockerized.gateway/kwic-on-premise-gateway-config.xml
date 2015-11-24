@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<gateway-config xmlns="http://xmlns.kaazing.com/2012/09/gateway">
+
+  <properties>
+    <property>
+      <name>proxy.to.logical.hostname</name>
+      <value>cloud</value>
+    </property>
+    <property>
+      <name>proxy.to.logical.port</name>
+      <value>2375</value>
+    </property>
+    <property>
+      <name>reverse.connection.hostname</name>
+      <value>cloud</value>
+    </property>
+    <property>
+      <name>reverse.connection.port</name>
+      <value>2376</value>
+    </property>
+    <property>
+      <name>proxy.to.physical.hostname</name>
+      <value>onpremise</value>
+    </property>
+    <property>
+      <name>proxy.to.physical.port</name>
+      <value>2375</value>
+    </property>
+  </properties>
+
+  <service>
+
+    <name>KWIC PROXY</name>
+    <description>
+        Creates reverse connection from ${proxy.to.logical.hostname}:${proxy.to.logical.port} to 
+        ${proxy.to.physical.hostname}:${proxy.to.physical.port} via ${reverse.connection.hostname}:${reverse.connection.port}
+
+        Thereby allowing access to ${proxy.to.physical.hostname}:${proxy.to.physical.port} on another box at
+        ${reverse.connection.hostname}:${reverse.connection.port} via ${proxy.to.logical.hostname}:${proxy.to.logical.port}
+    </description>
+
+    <accept>tcp://${proxy.to.logical.hostname}:${proxy.to.logical.port}</accept>
+
+    <connect>tcp://${proxy.to.physical.hostname}:${proxy.to.physical.port}</connect>
+
+    <type>proxy</type>
+
+    <accept-options>
+        <tcp.transport>socks://${reverse.connection.hostname}:${reverse.connection.port}</tcp.transport>
+        <socks.mode>reverse</socks.mode>
+        <socks.retry.maximum.interval>1 second</socks.retry.maximum.interval>
+        <socks.transport>wsn://${reverse.connection.hostname}:${reverse.connection.port}/kwic1</socks.transport>
+        <ws.inactivity.timeout>60 seconds</ws.inactivity.timeout>
+    </accept-options>
+
+    <cross-site-constraint>
+      <allow-origin>*</allow-origin>
+    </cross-site-constraint>
+
+  </service>
+
+</gateway-config>
+

@@ -1,0 +1,29 @@
+cloud:
+  build: dockerized.gateway
+  hostname: gateway.example.com
+  ports:
+    - "9000:9000"
+#   9001 is the reverse.connection.port that needs to be bindable, but due to docker linking it doesn't need to be exposed to public for this example       
+#   - "9001:9001"
+  environment: 
+    GATEWAY_OPTS: -Dproxy.to.logical.hostname=gateway.example.com -Dproxy.to.logical.port=9000 -Dreverse.connection.hostname=gateway.example.com -Dreverse.connection.port=9001
+  command: gateway.start --config conf/kwic-cloud-gateway-config.xml
+onpremise:
+  build: dockerized.gateway
+  hostname: onpremise.hostname
+  links:
+    - cloud:gateway.example.com
+    - proxyto:echo.service
+  environment: 
+    GATEWAY_OPTS: -Dproxy.to.logical.hostname=gateway.example.com -Dproxy.to.logical.port=9000 -Dproxy.to.physical.hostname=echo.service -Dproxy.to.physical.port=8002 -Dreverse.connection.hostname=gateway.example.com -Dreverse.connection.port=9001
+  command: gateway.start --config conf/kwic-on-premise-gateway-config.xml
+
+# Proxy To Backend service, only here for example
+proxyto:
+  build: dockerized.gateway
+  hostname: echo.service 
+  environment: 
+    GATEWAY_OPTS: -Dgateway.hostname=echo.service -Dgateway.tcp.echo.port=8002
+  command: gateway.start --config conf/gateway-config.xml
+
+ 

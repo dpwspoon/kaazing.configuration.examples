@@ -33,6 +33,8 @@ ENV GATEWAY_OPTS="-Xmx512m -Djava.security.egd=file:/dev/urandom"
 
 # add all the sample configs
 ADD gateway-config.xml conf/gateway-config.xml
+ADD kwic-cloud-gateway-config.xml conf/kwic-cloud-gateway-config.xml
+ADD kwic-on-premise-gateway-config.xml conf/kwic-on-premise-gateway-config.xml
 
 # add new files to the path
 ENV PATH=$PATH:/kaazing-gateway/bin

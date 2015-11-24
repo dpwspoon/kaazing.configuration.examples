@@ -24,3 +24,10 @@ docker kill gateway
 docker-compose -f jms.and.broker.yml up
 docker-compose -f jms.and.broker.yml rm
 ```
+
+### Launching KWIC demo
+```bash
+docker-compose -f kwic up
+```
+
+To Test run `nc gateway.example.com 9000`

@@ -54,6 +54,10 @@
       <value>8001</value>
     </property>
     <property>
+      <name>gateway.tcp.echo.port</name>
+      <value>8002</value>
+    </property>
+    <property>
       <name>broker.hostname</name>
       <value>broker.example.com</value>
     </property>
@@ -71,6 +75,7 @@
     <name>echo</name>
     <description>Simple echo service</description>
     <accept>ws://${gateway.hostname}:${gateway.extras.port}/echo</accept>
+    <accept>tcp://${gateway.hostname}:${gateway.tcp.echo.port}</accept>
 
     <type>echo</type>
 
