@@ -27,7 +27,7 @@ docker-compose -f jms.and.broker.yml rm
 
 ### Launching KWIC demo
 ```bash
-docker-compose -f kwic up
+docker-compose -f kwic.yml up
 ```
 
 To Test run `nc gateway.example.com 9000`
